@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "tic-bench"
 version = "0.1.0"
-description = "Sanitized TIC-Bench inference and evaluation toolkit"
+description = "Official evaluation code for Deeply Interleaved Text-Image Contexts for Multimodal LLMs Assessment"
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = [
