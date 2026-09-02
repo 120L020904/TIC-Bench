@@ -1,138 +1,45 @@
 # TIC-Bench
 
-Official repository for the paper **"Deeply Interleaved Text-Image Contexts for Multimodal LLMs Assessment."**
-
-TIC-Bench (deeply interleaved **T**ext-**I**mage **C**ontexts) is a benchmark for evaluating whether multimodal large language models can continuously bind, integrate, and propagate information distributed across long sequences of visual and textual evidence. This repository primarily provides the inference and evaluation code for the benchmark.
+Official repository for **"Deeply Interleaved Text-Image Contexts for Multimodal LLMs Assessment."** This repository primarily provides inference and evaluation code for TIC-Bench.
 
 <p align="center">
-  <img src="assets/ticbench_teaser.png" alt="TIC-Bench input comparison and benchmark composition" width="82%">
+  <img src="assets/ticbench_teaser.png" alt="TIC-Bench input comparison and benchmark composition" width="78%">
 </p>
 
-<p align="center"><em>TIC-Bench contrasts conventional multi-image inputs with deeply interleaved text-image contexts and contains 2,280 questions across three association domains.</em></p>
+## Dataset
 
-## Overview
+TIC-Bench evaluates multimodal large language models on deeply interleaved text-image contexts. It contains **2,280 questions** across three domains and eight task types:
 
-Most existing multimodal benchmarks focus on a single image or treat multiple images as a parallel collection while text serves mainly as an instruction. TIC-Bench instead evaluates reasoning over densely interleaved text-image contexts, where neither modality alone is sufficient to recover the answer.
+- **Logical Association:** Linear, Cyclic, and Convergent Logic
+- **Temporal Association:** Sequential, Retrospective, and Parallel Scenarios
+- **Spatial Association:** Map and Photo reasoning
 
-The benchmark contains **2,280 questions** across three complementary association domains and eight task types:
-
-| Domain | Task type | Questions | What it evaluates |
-| --- | --- | ---: | --- |
-| Logical Association | Linear Logic | 260 | Following a single cross-image relation chain |
-| Logical Association | Cyclic Logic | 249 | Revisiting earlier images during reasoning |
-| Logical Association | Convergent Logic | 275 | Combining multiple independent evidence branches |
-| Temporal Association | Sequential Scenario | 270 | Following events and states forward in time |
-| Temporal Association | Retrospective Scenario | 226 | Retrieving evidence from earlier story segments |
-| Temporal Association | Parallel Scenario | 230 | Coordinating multiple concurrent storylines |
-| Spatial Association | Map | 385 | Reconstructing spatial relations in aerial imagery |
-| Spatial Association | Photo | 385 | Reconstructing spatial relations in natural images |
-
-Domain totals are 784 Logical, 726 Temporal, and 770 Spatial questions. Logical and Spatial Association use multiple-choice questions, while Temporal Association includes 418 open-ended questions.
-
-## Benchmark Statistics
-
-TIC-Bench is designed around long, densely interleaved multimodal contexts:
-
-| Statistic | Value |
-| --- | ---: |
-| Questions | 2,280 |
-| Image instances | 45,776 |
-| Total image references | 85,145 |
-| Images per question | 20.08 |
-| Image references per question | 37.34 |
-| References per image | 1.86 |
-| Average textual context length | 309.3 words |
-
-## Task Domains
+Logical and Spatial Association use multiple-choice questions. Temporal Association contains both multiple-choice and open-ended questions. The released dataset is identified as `pino10010/TIC-Bench` on Hugging Face.
 
 <p align="center">
   <img src="assets/ticbench_overview.png" alt="Examples of Spatial, Logical, and Temporal Association tasks" width="100%">
 </p>
-
-<p align="center"><em>Representative deeply interleaved contexts from Spatial, Logical, and Temporal Association.</em></p>
-
-### Logical Association
-
-Logical instances contain ordered scene images connected through shared objects and relations. Questions identify target objects indirectly through cross-image descriptions, requiring models to ground textual references in visual entities and propagate those bindings through Linear, Cyclic, or Convergent reasoning structures.
-
-### Temporal Association
-
-Temporal instances use comic-style storyboards with interleaved descriptions. Images provide character identities, scene states, and event details, while text provides actions, causal relations, and plot progression. Character names and selected event information are masked or generalized to reduce text-only shortcuts.
-
-### Spatial Association
-
-Spatial instances divide a large source image into overlapping patches. Selected patches are replaced with textual descriptions of their content and spatial relationships to neighboring patches. Models must combine visible crops, descriptions of missing regions, and target views to infer relative positions in map-based or natural-image environments.
-
-## Evaluation Protocol
-
-The paper evaluates five open-source MLLMs in both standard and thinking modes:
-
-- Gemma-4-31B
-- GLM-4.6V
-- Qwen3.6-35B-A3B
-- Kimi-K2.6
-- MiMo-V2.5
-
-It also evaluates five closed-source MLLMs using their default inference settings:
-
-- Claude Sonnet 4.6
-- Gemini 3.1 Pro Preview
-- GPT-5.5
-- Doubao-Seed-2.0-Pro
-- GLM-5V-Turbo
-
-This produces 15 model inference settings in total. The paper uses Qwen 3.7 Plus, DeepSeek V4 Pro, and Claude Opus 4.8 as three independent automatic judges. Cases with inconsistent judgments are resolved through human evaluation.
-
-The released evaluation code preserves the three independent judgments, applies a 2-out-of-3 majority vote, records agreement and unanimity, and exposes disagreements for subsequent human review. Each judge evaluates the model's final conclusion and returns:
-
-```json
-{
-  "consistent": true,
-  "correct": true,
-  "score": 100,
-  "reason": "Concise justification"
-}
-```
-
-## Main Findings
-
-The strongest evaluated model, GPT-5.5, reaches **59.9%** overall accuracy, compared with **91.7%** for human experts. Gemini 3.1 Pro Preview reaches **59.0%**. The gap of more than 30 percentage points shows that current MLLMs still struggle to maintain and combine evidence distributed across interleaved images and text.
-
-Convergent logical reasoning and Parallel temporal reasoning are especially challenging. The paper's error analysis further identifies abstraction, reasoning, and hallucination errors as major failure modes, particularly when models must maintain stable entity mappings or merge multiple evidence streams.
-
-## Repository Scope
-
-This public repository focuses on dataset evaluation and includes:
-
-- Dataset loading for all three association domains
-- Multimodal input assembly
-- Resumable model inference
-- Full, Text-only, and Images-only input settings
-- Three-judge semantic evaluation and majority voting
-- Accuracy, score, agreement, and unanimity reports
-- Tests for prompt safety, result preservation, and judge recovery
-- One minimal, replaceable OpenAI Responses client template
-
-The repository does not include dataset-construction pipelines, image-generation code, model weights, service endpoints, credentials, usage tracking, or request logs.
 
 ## Installation
 
 Python 3.10 or later is required.
 
 ```bash
+git clone YOUR_REPOSITORY
+cd TIC-Bench
 python -m pip install -e ".[test]"
 ```
 
-The client uses the standard runtime configuration supported by the official SDK. No credential or endpoint value is stored in this repository.
+The included client uses the standard runtime configuration supported by the official OpenAI SDK. This repository does not store credentials or service endpoints.
 
 ## Dataset Layout
 
-Each benchmark domain is organized into `question_*` directories.
+Each benchmark domain is organized into `question_*` directories:
 
 ```text
 DATASET_ROOT/
 ├── question_0/
-│   ├── benchmark question data
+│   ├── question data
 │   ├── referenced images
 │   ├── answer_results_<model>.json
 │   └── evaluation_results_<model>.json
@@ -140,109 +47,136 @@ DATASET_ROOT/
 └── ...
 ```
 
-The loaders recognize the following domain-specific files:
+The loader recognizes the following source files:
 
-| Domain | Question data |
-| --- | --- |
-| Logical | `qa_pairs*.json` and `node_sequence*.json` |
-| Temporal | `qa_pairs*.json` with a top-level `qa` list |
-| Spatial | `dataset_caption.jsonl` |
+| Domain | Required question files | CLI kind |
+| --- | --- | --- |
+| Logical Association | `qa_pairs*.json`, `node_sequence*.json` | `visual` |
+| Temporal Association | `qa_pairs*.json` with a top-level `qa` list | `temporal` |
+| Spatial Association | `dataset_caption.jsonl` | `spatial` |
 
-In the command-line interface, Logical Association uses the internal kind name `visual` for compatibility with the original data layout.
+The `visual` name is retained internally for compatibility with the original Logical Association data layout.
 
-The released dataset is identified as `pino10010/TIC-Bench` on Hugging Face.
+## Quick Start
 
-## Usage
-
-### Validate Input Assembly
-
-Use dry-run mode to validate dataset discovery and message construction without sending model requests:
+### 1. Run Model Inference
 
 ```bash
-python -m ticbench ask DATASET_ROOT --model MODEL_NAME --dry-run
+python -m ticbench ask DATASET_ROOT \
+  --model MODEL_NAME \
+  --kind spatial
 ```
 
-Specify the domain explicitly when automatic detection is not appropriate:
+Answers are written to:
 
-```bash
-python -m ticbench ask DATASET_ROOT --model MODEL_NAME --kind spatial --dry-run
-python -m ticbench ask DATASET_ROOT --model MODEL_NAME --kind visual --dry-run
-python -m ticbench ask DATASET_ROOT --model MODEL_NAME --kind temporal --dry-run
+```text
+question_*/answer_results_<model>.json
 ```
 
-### Run Model Inference
+Inference is resumable. Existing non-empty answers are preserved even if their historical status field is not `success`.
 
-```bash
-python -m ticbench ask DATASET_ROOT --model MODEL_NAME
-```
+### 2. Run Three-Judge Evaluation
 
-Available input settings are:
-
-- `full`: retain the complete interleaved text-image context
-- `text_only`: remove image contents while preserving textual reference markers and question text
-- `images_only`: remove descriptive textual evidence while retaining the images and question
-- `question_images_only`: retain question-related images and the question text
-
-Example:
-
-```bash
-python -m ticbench ask DATASET_ROOT --model MODEL_NAME --mode text_only
-```
-
-Inference is resumable. Any existing non-empty answer is preserved regardless of its historical status field, and historical records outside the current dataset view are not discarded.
-
-### Run Three-Judge Evaluation
-
-`TARGET_NAME` is the portion of an answer filename between `answer_results_` and `.json`.
+The evaluation pipeline requires three distinct judge model names and applies a 2-out-of-3 majority vote.
 
 ```bash
 python -m ticbench evaluate DATASET_ROOT \
   --judge-model JUDGE_1 JUDGE_2 JUDGE_3 \
-  --target TARGET_NAME
+  --target TARGET_NAME \
+  --kind temporal
 ```
 
-Three distinct judge names are required. Each completed evaluation stores the individual judge outputs together with:
+`TARGET_NAME` is the portion of the answer filename between `answer_results_` and `.json`. For example:
 
+```text
+answer_results_example-model.json
+               └─ TARGET_NAME = example-model
+```
+
+Evaluation results are written to:
+
+```text
+question_*/evaluation_results_<target>.json
+```
+
+Each result contains the three individual judgments and their aggregate fields:
+
+- `correct` and `consistent`
+- `score`
 - `majority_vote`
 - `judge_votes`
-- `judge_consistency_votes`
+- `judge_results`
 - `agreement_count`
 - `unanimous`
-- mean `score`
 
-If one or more judge calls fail, successful judgments are retained and a later run requests only the missing judgments.
+If a judge call fails, completed judgments are retained. A later run requests only the missing judgments.
 
-### Summarize Results
+## Python Usage
 
-```bash
-python -m ticbench report DATASET_ROOT
+All inference and evaluation functions accept injected model callers, so the benchmark logic can be used without the command-line interface.
+
+```python
+from pathlib import Path
+
+from ticbench.inference import run_answers
+from ticbench.openai_template import create_openai_caller
+
+root = Path("DATASET_ROOT")
+model = "MODEL_NAME"
+
+summary = run_answers(
+    root=root,
+    model_name=model,
+    caller=create_openai_caller(model),
+    kind="spatial",
+)
+
+print(summary)
 ```
 
-The report contains the number of evaluated questions, correct answers, accuracy, mean score, unanimous decisions, and unanimity rate for each evaluated model.
+Three-judge evaluation can be called directly in the same way:
+
+```python
+from ticbench.evaluation import run_evaluation
+from ticbench.openai_template import create_openai_caller
+
+judges = {
+    name: create_openai_caller(name)
+    for name in ("JUDGE_1", "JUDGE_2", "JUDGE_3")
+}
+
+summary = run_evaluation(
+    root=Path("DATASET_ROOT"),
+    target="TARGET_NAME",
+    judges=judges,
+    kind="temporal",
+)
+
+print(summary)
+```
 
 ## Code Structure
 
 ```text
 ticbench/
 ├── cli.py                 # Command-line interface
-├── questions.py           # Domain loaders and multimodal input assembly
+├── questions.py           # Dataset loading and multimodal input assembly
 ├── inference.py           # Resumable answer generation
-├── evaluation.py          # Three-judge evaluation and aggregation
-├── report.py              # Offline result summaries
-├── io.py                  # Dataset detection and safe JSON utilities
-└── openai_template.py     # The single model-service adapter template
+├── evaluation.py          # Three-judge evaluation and majority voting
+├── io.py                  # Dataset detection and JSON utilities
+└── openai_template.py     # Replaceable model-service template
 
 tests/
-├── test_questions.py      # Prompt construction and answer-leakage tests
-├── test_inference.py      # Resume and answer-preservation tests
-└── test_evaluation.py     # Three-judge and recovery tests
+├── test_questions.py
+├── test_inference.py
+└── test_evaluation.py
 ```
 
-## Authors
+## Testing
 
-Zihao Wang, Xi Xiang, Yuwen Sun, Yingyu Li, Yabo Zhang, Yihan Zeng, Fan Li, and Wangmeng Zuo.
-
-Harbin Institute of Technology and Huawei Noah's Ark Lab.
+```bash
+python -m pytest -q
+```
 
 ## Citation
 
