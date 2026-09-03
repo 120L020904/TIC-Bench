@@ -12,14 +12,8 @@ dependencies = [
     "openai>=1.68",
 ]
 
-[project.optional-dependencies]
-test = ["pytest>=8"]
-
 [project.scripts]
 ticbench = "ticbench.cli:main"
 
 [tool.setuptools.packages.find]
 include = ["ticbench*"]
-
-[tool.pytest.ini_options]
-testpaths = ["tests"]

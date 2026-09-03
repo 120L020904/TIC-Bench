@@ -36,7 +36,7 @@ Python 3.10 or later is required.
 ```bash
 git clone YOUR_REPOSITORY
 cd TIC-Bench
-python -m pip install -e ".[test]"
+python -m pip install -e .
 ```
 
 The included client uses the standard runtime configuration supported by the official OpenAI SDK. This repository does not store credentials or service endpoints.
@@ -174,17 +174,6 @@ ticbench/
 ├── evaluation.py          # Three-judge evaluation and majority voting
 ├── io.py                  # Dataset detection and JSON utilities
 └── openai_template.py     # Replaceable model-service template
-
-tests/
-├── test_questions.py
-├── test_inference.py
-└── test_evaluation.py
-```
-
-## Testing
-
-```bash
-python -m pytest -q
 ```
 
 ## Citation
