@@ -1,5 +1,14 @@
 # TIC-Bench
 
+<p align="center">
+  <a href="https://arxiv.org/abs/2609.02573">
+    <img src="https://img.shields.io/badge/Paper-arXiv%3A2609.02573-B31B1B?logo=arxiv&amp;logoColor=white" alt="Paper on arXiv">
+  </a>
+  <a href="https://huggingface.co/datasets/pino10010/TIC-Bench">
+    <img src="https://img.shields.io/badge/Dataset-Hugging%20Face-FFD21E?logo=huggingface&amp;logoColor=black" alt="TIC-Bench dataset on Hugging Face">
+  </a>
+</p>
+
 Official repository for **"Deeply Interleaved Text-Image Contexts for Multimodal LLMs Assessment."** This repository primarily provides inference and evaluation code for TIC-Bench.
 
 <p align="center">
@@ -180,4 +189,16 @@ python -m pytest -q
 
 ## Citation
 
-Please cite **"Deeply Interleaved Text-Image Contexts for Multimodal LLMs Assessment"** when using TIC-Bench. Complete publication metadata and BibTeX will be added with the public paper release.
+If you find TIC-Bench useful, please cite our paper:
+
+```bibtex
+@misc{wang2026deeplyinterleavedtextimagecontexts,
+  title         = {Deeply Interleaved Text-Image Contexts for Multimodal LLMs Assessment},
+  author        = {Zihao Wang and Xi Xiang and Yuwen Sun and Yingyu Li and Yabo Zhang and Yihan Zeng and Fan Li and Wangmeng Zuo},
+  year          = {2026},
+  eprint        = {2609.02573},
+  archivePrefix = {arXiv},
+  primaryClass  = {cs.CV},
+  url           = {https://arxiv.org/abs/2609.02573}
+}
+```
