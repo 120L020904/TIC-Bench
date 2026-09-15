@@ -181,13 +181,10 @@ ticbench/
 If you find TIC-Bench useful, please cite our paper:
 
 ```bibtex
-@misc{wang2026deeplyinterleavedtextimagecontexts,
-  title         = {Deeply Interleaved Text-Image Contexts for Multimodal LLMs Assessment},
-  author        = {Zihao Wang and Xi Xiang and Yuwen Sun and Yingyu Li and Yabo Zhang and Yihan Zeng and Fan Li and Wangmeng Zuo},
-  year          = {2026},
-  eprint        = {2609.02573},
-  archivePrefix = {arXiv},
-  primaryClass  = {cs.CV},
-  url           = {https://arxiv.org/abs/2609.02573}
+@article{wang2026deeply,
+  title   = {Deeply Interleaved Text-Image Contexts for Multimodal LLMs Assessment},
+  author  = {Wang, Zihao and Xiang, Xi and Sun, Yuwen and Li, Yingyu and Zhang, Yabo and Zeng, Yihan and Li, Fan and Zuo, Wangmeng},
+  journal = {arXiv preprint arXiv:2609.02573},
+  year    = {2026}
 }
 ```
